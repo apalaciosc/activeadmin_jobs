@@ -20,12 +20,12 @@ class ActiveAdmin::Views::Pages::Base
     adj_build(*args)
     current_user_method = ActiveAdmin.application.current_user_method
 
-    if current_user_method
-      admins_job_identifier = send(current_user_method).job_identifier
-      @body.set_attribute "data-identifier", admins_job_identifier
-      @body.set_attribute "data-root-url", "/"
-      @body.set_attribute "data-jobs-url", AdminHelpers.jobs_url
-      @body.set_attribute "data-translations", I18nDictionary.translations.to_json
+    if current_user_method && @body.present?
+      admins_job_identifier = send(current_user_method)&.job_identifier
+      @body.set_attribute("data-identifier", admins_job_identifier) if admins_job_identifier
+      @body.set_attribute("data-root-url", "/")
+      @body.set_attribute("data-jobs-url", AdminHelpers.jobs_url)
+      @body.set_attribute("data-translations", I18nDictionary.translations.to_json)
     end
   end
 end
